@@ -63,9 +63,9 @@ Clients (Web · Mobile)
    AWS Secrets Manager · S3
 ```
 
-Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v2.drawio`](./diagrams/overm-architecture-v2.drawio)
+Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v2.drawio`](./diagrams/overm-architecture-v2.drawio.png)
 
-Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio)
+Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio.png)
 
 ---
 
