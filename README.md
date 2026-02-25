@@ -499,7 +499,7 @@ Built by Mario Irigoyen as a learning project during the final semester of a Com
 
 The app is intentionally overengineered. A recipe app does not need Kafka, Kubernetes, or a separate nutrition microservice. That is the point. Every architectural decision that would be justified at scale is practiced here at small scale so the patterns are familiar when they matter for real. But I dont want to be stuck developing an app ment for 10 people minimum for 5 years just to learn.
 
-*"I designed and built a polyrepo microservices system from scratch. The app helps two people plan their meals. The architecture could handle a few more."*
+*"I designed and built a polyrepo microservices system from scratch. The app helps me and my mom plan our meals. The architecture could handle a few more."*
 
 ---
 
