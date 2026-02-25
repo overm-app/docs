@@ -67,6 +67,8 @@ Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v2.drawio`](
 
 Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio.png)
 
+Critical User Journeys [`overm-docs/diagrams/overm-critical-user-journeys.png`](./diagrams/overm-critical-user-journeys.png)
+
 ---
 
 ## Repositories
