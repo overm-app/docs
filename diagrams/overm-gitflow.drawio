@@ -1,0 +1,273 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.5.3">
+  <diagram id="DzMEWf5_Bk6tu2jDeorm" name="Page-1">
+    <mxGraphModel dx="2218" dy="1099" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;fontSize=22;fontStyle=1;align=left;fontColor=#FFFFFF;" value="OVERM — Git Flow &amp; Branching Strategy" vertex="1">
+          <mxGeometry height="32" width="600" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="title2" parent="1" style="text;fontSize=22;fontStyle=1;align=left;fontColor=#FFFFFF;" value="OVERM — Git Flow &amp; Branching Strategy" vertex="1">
+          <mxGeometry height="32" width="700" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-main" parent="1" style="rounded=1;fillColor=#E040A0;strokeColor=#B0206E;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=20;" value="main" vertex="1">
+          <mxGeometry height="36" width="120" x="1760" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-hotfix" parent="1" style="rounded=1;fillColor=#E05252;strokeColor=#B03030;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=20;" value="hotfix" vertex="1">
+          <mxGeometry height="36" width="120" x="1760" y="196" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-qa" parent="1" style="rounded=1;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=20;" value="QA" vertex="1">
+          <mxGeometry height="36" width="120" x="1760" y="282" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-develop" parent="1" style="rounded=1;fillColor=#E08050;strokeColor=#B05030;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=20;" value="develop" vertex="1">
+          <mxGeometry height="36" width="120" x="1760" y="368" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-feature" parent="1" style="rounded=1;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=20;" value="feature/*" vertex="1">
+          <mxGeometry height="36" width="120" x="1760" y="454" as="geometry" />
+        </mxCell>
+        <mxCell id="line-main" edge="1" parent="1" style="endArrow=none;strokeColor=#E040A0;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="128" as="sourcePoint" />
+            <mxPoint x="1750" y="128" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line-hotfix" edge="1" parent="1" style="endArrow=none;strokeColor=#E05252;strokeWidth=2;dashed=1;dashPattern=8 4;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="214" as="sourcePoint" />
+            <mxPoint x="1750" y="214" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line-qa" edge="1" parent="1" source="qa-v10x" style="endArrow=none;strokeColor=#52AAEE;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="300" as="sourcePoint" />
+            <mxPoint x="1750" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line-develop" edge="1" parent="1" style="endArrow=none;strokeColor=#E08050;strokeWidth=2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="386" as="sourcePoint" />
+            <mxPoint x="1750" y="386" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line-feat1" edge="1" parent="1" style="endArrow=none;strokeColor=#A040D0;strokeWidth=2;dashed=1;dashPattern=6 4;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="472" as="sourcePoint" />
+            <mxPoint x="700" y="472" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line-feat2" edge="1" parent="1" style="endArrow=none;strokeColor=#A040D0;strokeWidth=2;dashed=1;dashPattern=6 4;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="472" as="sourcePoint" />
+            <mxPoint x="1240" y="472" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="main-v000" parent="1" style="ellipse;fillColor=#E040A0;strokeColor=#B0206E;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 0.0.0" vertex="1">
+          <mxGeometry height="40" width="40" x="80" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="main-v1xx" parent="1" style="ellipse;fillColor=#E040A0;strokeColor=#B0206E;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.x.x" vertex="1">
+          <mxGeometry height="40" width="40" x="880" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="main-v2xx" parent="1" style="ellipse;fillColor=#E040A0;strokeColor=#B0206E;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 2.x.x" vertex="1">
+          <mxGeometry height="40" width="40" x="1360" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="hotfix-v" parent="1" style="ellipse;fillColor=#E05252;strokeColor=#B03030;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=9;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.x.xh1" vertex="1">
+          <mxGeometry height="40" width="40" x="1100" y="194" as="geometry" />
+        </mxCell>
+        <mxCell id="qa-v000" parent="1" style="ellipse;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=light-dark(#FFFFFF,#DFDFDF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 0.0.0" vertex="1">
+          <mxGeometry height="40" width="40" x="180" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="qa-v01x" parent="1" style="ellipse;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=light-dark(#FFFFFF,#DFDFDF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 0.1.x" vertex="1">
+          <mxGeometry height="40" width="40" x="540" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="qa-v11x" parent="1" style="ellipse;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=light-dark(#FFFFFF,#DFDFDF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.1.x" vertex="1">
+          <mxGeometry height="40" width="40" x="1240" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-v000" parent="1" style="ellipse;fillColor=#E08878;strokeColor=#B05050;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 0.0.1" vertex="1">
+          <mxGeometry height="40" width="40" x="300" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-v002" parent="1" style="ellipse;fillColor=#E08878;strokeColor=#B05050;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 0.0.2" vertex="1">
+          <mxGeometry height="40" width="40" x="440" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-v100" parent="1" style="ellipse;fillColor=#E08878;strokeColor=#B05050;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.0.0" vertex="1">
+          <mxGeometry height="40" width="40" x="930" y="368" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-v101" parent="1" style="ellipse;fillColor=#E08878;strokeColor=#B05050;fontColor=light-dark(#FFFFFF,#FFFFFF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.0.1" vertex="1">
+          <mxGeometry height="40" width="40" x="1060" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="feat1-a" parent="1" style="ellipse;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=9;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="360" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="feat1-b" parent="1" style="ellipse;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=9;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="480" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="feat1-label" parent="1" style="text;fontSize=9;fontColor=#CC88FF;fontStyle=2;align=center;" value="feature/issue-001" vertex="1">
+          <mxGeometry height="16" width="160" x="330" y="488" as="geometry" />
+        </mxCell>
+        <mxCell id="feat2-a" parent="1" style="ellipse;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=9;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="1000" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="feat2-b" parent="1" style="ellipse;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=9;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="1120" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="feat2-label" parent="1" style="text;fontSize=9;fontColor=#CC88FF;fontStyle=2;align=center;" value="feature/issue-002" vertex="1">
+          <mxGeometry height="16" width="160" x="970" y="488" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-main-qa" edge="1" parent="1" source="main-v000" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#3700CC;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#6a00ff;" target="qa-v000" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-qa-dev" edge="1" parent="1" source="qa-v000" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#001DBC;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#0050ef;" target="dev-v000" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-dev-feat1" edge="1" parent="1" source="dev-v000" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A040D0;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="feat1-a" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-feat1-dev" edge="1" parent="1" source="feat1-b" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A040D0;strokeWidth=2;fontColor=#CC88FF;fontSize=9;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="dev-v002" value="PR to dev">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-dev-qa" edge="1" parent="1" source="dev-v002" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#52AAEE;strokeWidth=2;fontColor=#88CCFF;fontSize=9;fontStyle=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="qa-v01x" value="PR to QA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-qa-main" edge="1" parent="1" source="qa-v01x" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E040A0;strokeWidth=2;fontColor=#FF88CC;fontSize=9;fontStyle=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="main-v1xx" value="PR to main">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="240" />
+              <mxPoint x="900" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-main-hotfix" edge="1" parent="1" source="main-v1xx" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E05252;strokeWidth=1;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="hotfix-v" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-hotfix-main" edge="1" parent="1" source="hotfix-v" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E05252;strokeWidth=2;fontColor=#FF8888;fontSize=9;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="main-v2xx" value="merge">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="214" />
+              <mxPoint x="1200" y="128" />
+              <mxPoint x="1360" y="128" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arr-hotfix-dev" edge="1" parent="1" source="hotfix-v" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E05252;strokeWidth=2;dashed=1;fontColor=#FF8888;fontSize=8;fontStyle=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="dev-v101" value="also merge&#xa;to develop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-main-qa2" edge="1" parent="1" source="main-v1xx" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A50040;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#d80073;" target="qa-v10x" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-qa-dev2" edge="1" parent="1" source="qa-v10x" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A50040;strokeWidth=1;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#d80073;" target="dev-v100" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-dev-feat2" edge="1" parent="1" source="dev-v100" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A040D0;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="feat2-a" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-feat2-dev" edge="1" parent="1" source="feat2-b" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A040D0;strokeWidth=2;fontColor=#CC88FF;fontSize=9;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="dev-v101" value="PR to dev">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-dev-qa2" edge="1" parent="1" source="dev-v101" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#52AAEE;strokeWidth=2;fontColor=#88CCFF;fontSize=9;fontStyle=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="qa-v11x" value="PR to QA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-qa-main2" edge="1" parent="1" source="qa-v11x" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E040A0;strokeWidth=2;fontColor=#FF88CC;fontSize=9;fontStyle=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="main-v2xx" value="PR to main">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="240" />
+              <mxPoint x="1380" y="240" />
+              <mxPoint x="1380" y="128" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="col-planning" parent="1" style="rounded=1;fillColor=#E040A0;strokeColor=#B0206E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="Planning" vertex="1">
+          <mxGeometry height="40" width="160" x="160" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="col-feature" parent="1" style="rounded=1;fillColor=#A040D0;strokeColor=#7020A0;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="feature/*" vertex="1">
+          <mxGeometry height="40" width="160" x="360" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="col-develop" parent="1" style="rounded=1;fillColor=#E08050;strokeColor=#B05030;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="develop" vertex="1">
+          <mxGeometry height="40" width="160" x="560" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="col-qa" parent="1" style="rounded=1;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="QA / Integration" vertex="1">
+          <mxGeometry height="40" width="160" x="760" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="col-main" parent="1" style="rounded=1;fillColor=#E040A0;strokeColor=#B0206E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="main (prod)" vertex="1">
+          <mxGeometry height="40" width="160" x="960" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="col-hotfix" parent="1" style="rounded=1;fillColor=#E05252;strokeColor=#B03030;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=15;" value="hotfix" vertex="1">
+          <mxGeometry height="40" width="160" x="1160" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="env-planning" parent="1" style="rounded=1;fillColor=#7B2FBE;strokeColor=#5A1A9A;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="GitHub Issues" vertex="1">
+          <mxGeometry height="40" width="160" x="160" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="env-feature" parent="1" style="rounded=1;fillColor=#2D6A1E;strokeColor=#1A4A10;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="Local docker-compose" vertex="1">
+          <mxGeometry height="40" width="160" x="360" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="env-develop" parent="1" style="rounded=1;fillColor=#2D6A1E;strokeColor=#1A4A10;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="Local docker-compose" vertex="1">
+          <mxGeometry height="40" width="160" x="560" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="env-qa" parent="1" style="rounded=1;fillColor=#B8860B;strokeColor=#8B6508;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="Minikube" vertex="1">
+          <mxGeometry height="40" width="160" x="760" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="env-main" parent="1" style="rounded=1;fillColor=#CC5500;strokeColor=#993300;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="EKS (AWS)" vertex="1">
+          <mxGeometry height="40" width="160" x="960" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="env-hotfix" parent="1" style="rounded=1;fillColor=#CC5500;strokeColor=#993300;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=15;" value="EKS (AWS)" vertex="1">
+          <mxGeometry height="40" width="160" x="1160" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="act-planning" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="📋 Write issue&#xa;Define acceptance&#xa;criteria + contract&#xa;changes needed" vertex="1">
+          <mxGeometry height="90" width="160" x="160" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="act-feature" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="🚀 Branch from develop&#xa;feature/issue-NNN&#xa;Commit · push&#xa;Local testing only" vertex="1">
+          <mxGeometry height="90" width="160" x="360" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="act-develop" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="🚀 PR to develop&#xa;Closes #NNN&#xa;Code review (solo:&#xa;self-review checklist)" vertex="1">
+          <mxGeometry height="90" width="160" x="560" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="act-qa" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="🚀 PR to QA&#xa;Deploy to minikube&#xa;Integration tests&#xa;Contract validation" vertex="1">
+          <mxGeometry height="90" width="160" x="760" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="act-main" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="🚀 PR to main&#xa;Deploy to EKS&#xa;Tag release vX.Y.Z&#xa;Update CHANGELOG" vertex="1">
+          <mxGeometry height="90" width="160" x="960" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="act-hotfix" parent="1" style="rounded=1;fillColor=#2A2A4A;strokeColor=#4A4A7A;fontColor=#CCCCFF;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;arcSize=8;" value="🔥 Branch from main&#xa;hotfix/issue-NNN&#xa;Fix · test · merge&#xa;→ main AND develop" vertex="1">
+          <mxGeometry height="90" width="160" x="1160" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="flow1" edge="1" parent="1" source="act-planning" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#7B2FBE;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="act-feature" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow2" edge="1" parent="1" source="act-feature" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#A040D0;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="act-develop" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow3" edge="1" parent="1" source="act-develop" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#E08050;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="act-qa" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow4" edge="1" parent="1" source="act-qa" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#52AAEE;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="act-main" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="semver-bg" parent="1" style="rounded=1;fillColor=#1E1E3A;strokeColor=#4444AA;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="220" width="300" x="1370" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="semver-title" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#AAAAFF;align=center;" value="Semantic Versioning" vertex="1">
+          <mxGeometry height="20" width="300" x="1370" y="738" as="geometry" />
+        </mxCell>
+        <mxCell id="semver-body" parent="1" style="text;fontSize=10;fontColor=#CCCCFF;align=left;spacingLeft=12;verticalAlign=top;spacingTop=4;" value="MAJOR . MINOR . PATCH&#xa;─────────────────────────&#xa;PATCH (0.0.x)&#xa;  Bug fix, no new features&#xa;&#xa;MINOR (0.x.0)&#xa;  New endpoint, backward compatible&#xa;  = new feature branch merged&#xa;&#xa;MAJOR (x.0.0)&#xa;  Breaking contract change&#xa;  = incompatible API change" vertex="1">
+          <mxGeometry height="180" width="300" x="1370" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="naming-bg" parent="1" style="rounded=1;fillColor=#1E1E3A;strokeColor=#AA44AA;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="140" width="300" x="1370" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="naming-title" parent="1" style="text;fontSize=12;fontStyle=1;fontColor=#CC88FF;align=center;" value="Branch Naming Convention" vertex="1">
+          <mxGeometry height="20" width="300" x="1370" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="naming-body" parent="1" style="text;fontSize=10;fontColor=#CCCCFF;align=left;spacingLeft=12;verticalAlign=top;spacingTop=4;" value="feature/issue-001-add-login&#xa;feature/issue-002-recipe-crud&#xa;hotfix/issue-042-jwt-expiry&#xa;─────────────────────────&#xa;Format:&#xa;  type/issue-NNN-short-description&#xa;&#xa;Commit message:&#xa;  feat(auth): add login endpoint #001" vertex="1">
+          <mxGeometry height="142" width="300" x="1370" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="zPUT7ygE5DQq7U7vhT2o-1" edge="1" parent="1" style="endArrow=none;strokeColor=#52AAEE;strokeWidth=2;" target="qa-v10x" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="300" as="sourcePoint" />
+            <mxPoint x="1750" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qa-v10x" parent="1" style="ellipse;fillColor=#52AAEE;strokeColor=#2080CC;fontColor=light-dark(#FFFFFF,#DFDFDF);fontSize=10;fontStyle=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" value="V 1.0.x" vertex="1">
+          <mxGeometry height="40" width="40" x="910" y="280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,108 @@
+---
+config:
+  theme: redux-dark-color
+---
+sequenceDiagram
+    actor user
+    participant front as Frontend
+    participant auth as UserAuth
+    participant recipe as RecipeCatalog
+    participant menu as MenuShuffle
+    participant nutri as Nutrition
+    participant ai as ImageProcessing
+    participant aimodel as AIModel
+    participant notif as Notifications
+    participant kafka as Kafka
+    participant db as PostgreSQL
+    participant mongo as MongoDB
+    participant apinutri as NutritionAPI
+
+    rect rgb(30, 30, 60)
+        Note over user,mongo: CUJ 1 — Login and load home screen
+        user->>front: login
+        front->>auth: POST /auth/v1/login
+        auth->>db: SELECT user WHERE email = ?
+        db-->>auth: user row
+        auth-->>front: { access_token, refresh_token, user }
+
+        par Load in parallel (frontend fires both at once)
+            front->>recipe: GET /recipe-catalog/v1/recipes
+            recipe->>mongo: find recipes by user_id
+            mongo-->>recipe: recipe documents
+            recipe-->>front: recipes[]
+        and
+            front->>menu: GET /menu/v1/active
+            menu->>mongo: find active menu by user_id
+            mongo-->>menu: menu or null
+            menu-->>front: menu (if exists)
+        end
+    end
+
+    rect rgb(30, 60, 30)
+        Note over user,apinutri: CUJ 2 — Create recipe manually + calculate nutrition
+        user->>front: fill recipe form, submit
+        front->>recipe: POST /recipe-catalog/v1/recipes
+        recipe->>nutri: POST /nutrition/v1/calculate (sync HTTP)
+        nutri->>apinutri: lookup unknown ingredients
+        apinutri-->>nutri: nutrient data
+        nutri-->>recipe: macros_per_serving
+        recipe->>mongo: save recipe with macros
+        mongo-->>recipe: saved recipe
+        recipe-->>front: 201 { recipe with macros }
+        recipe->>kafka: recipe.created (async, for menu recalc etc.)
+    end
+
+    rect rgb(60, 30, 30)
+        Note over user,apinutri: CUJ 3 — Upload image + process + calculate nutrition
+        user->>front: upload photo of recipe
+        front->>recipe: POST /recipe-catalog/v1/recipes/upload
+        recipe-->>front: 202 Accepted { upload_id } (don't make user wait)
+        recipe->>kafka: recipe.image.uploaded { upload_id, image_url, user_id }
+
+        kafka->>ai: consume recipe.image.uploaded
+        ai->>aimodel: send image for transcription
+        aimodel-->>ai: extracted recipe text
+        ai->>nutri: POST /nutrition/v1/calculate
+        nutri->>apinutri: lookup ingredients
+        apinutri-->>nutri: nutrient data
+        nutri-->>ai: macros
+        ai->>mongo: save completed recipe with macros
+        ai->>kafka: recipe.transcription.completed { user_id, recipe_id }
+        kafka->>notif: consume recipe.transcription.completed
+        notif-->>user: push/email "Your recipe is ready!"
+    end
+
+    rect rgb(40, 40, 80)
+        Note over user,mongo: CUJ 4 — Generate a menu (MVP shuffle)
+        user->>front: set time range + meals per day, hit generate
+        front->>menu: POST /menu/v1/generate
+        Note right of front: {<br/> time_range: "week",<br/> meals_per_day: 3,<br/> strategy: "shuffle"<br/>}
+
+        menu->>recipe: GET /recipe-catalog/v1/recipes (user's full catalog)
+        recipe-->>menu: recipes[] with macros
+
+        Note over menu: shuffle algorithm runs here,<br/>picks recipes to fill slots,<br/>calculates total macros for the period
+
+        menu->>mongo: save menu as DRAFT
+        mongo-->>menu: saved menu { id, status: draft }
+        menu-->>front: 200 { menu with daily breakdown + total macros }
+
+        user->>front: review menu, confirm it
+        front->>menu: PATCH /menu/v1/{id}/confirm
+        menu->>mongo: update status draft → active, archive previous active
+        mongo-->>menu: updated menu
+        menu-->>front: 200 { active menu }
+        menu->>kafka: menu.activated { user_id, menu_id }
+    end
+
+    rect rgb(40, 80, 40)
+        Note over user,mongo: CUJ 4b — Future: constrained generation
+        user->>front: set constraints<br/>(craved recipes, calories, ease, time)
+        front->>menu: POST /menu/v1/generate
+        Note right of front: {<br/> time_range: "week",<br/> meals_per_day: 3,<br/> strategy: "constrained",<br/> pinned_recipes: ["id1","id2"],<br/> targets: { calories: 2000 },<br/> filters: { max_prep_minutes: 30 }<br/>}
+        Note over menu: same endpoint, same service,<br/>strategy field picks the algorithm.<br/>pinned slots are filled first,<br/>algorithm fills the rest.
+        menu->>recipe: GET /recipe-catalog/v1/recipes
+        recipe-->>menu: recipes[]
+        menu->>mongo: save as DRAFT
+        menu-->>front: menu with breakdown
+    end
