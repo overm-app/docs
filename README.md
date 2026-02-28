@@ -4,7 +4,7 @@
 
 **Author:** Mario Irigoyen — [@Tar-Mairon24](https://github.com/Tar-Mairon24)  
 **Status:** Active development — Phase 1  
-**Stack:** Go · Python · Vue/Angular · Kubernetes · Kafka · MongoDB · PostgreSQL · AWS EKS
+**Stack:** Go · Python · Vue/Angular · Kubernetes · Kafka · MongoDB · PostgreSQL · Novu · AWS EKS
 
 ---
 
@@ -49,8 +49,13 @@ Clients (Web · Mobile)
 │                                                       │
 │  overm-auth          overm-recipe-catalog             │
 │  overm-menu-shuffle  overm-nutrition                  │
-│  overm-image-processing  overm-notification           │
+│  overm-image-processing  overm-notif-bridge           │
 │  overm-frontend                                       │
+│                                                       │
+│  ┌──────────────────────────────────────────────────┐ │
+│  │  Novu (self-hosted · Helm)                       │ │
+│  │  Templates · Retries · SendGrid · FCM · APNs     │ │
+│  └──────────────────────────────────────────────────┘ │
 │                                                       │
 │  ┌─────────────────────────────────────────────────┐  │
 │  │  namespace: monitoring                          │  │
@@ -63,11 +68,9 @@ Clients (Web · Mobile)
    AWS Secrets Manager · S3
 ```
 
-Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v2.drawio`](./diagrams/overm-architecture-v2.drawio.png)
+Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v3.drawio`](./diagrams/overm-architecture-v3.drawio)
 
-Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio.png)
-
-Critical User Journeys [`overm-docs/diagrams/overm-critical-user-journeys.png`](./diagrams/overm-critical-user-journeys.png)
+Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio)
 
 ---
 
@@ -85,10 +88,11 @@ All repositories live under the [@Tar-Mairon24](https://github.com/Tar-Mairon24)
 | **[overm-menu-shuffle](https://github.com/Tar-Mairon24/overm-menu-shuffle)** | Menu generation and management | Go |
 | **[overm-nutrition](https://github.com/Tar-Mairon24/overm-nutrition)** | Macro calculator, external API integration | Go |
 | **[overm-image-processing](https://github.com/Tar-Mairon24/overm-image-processing)** | OCR, handwriting transcription | Python |
-| **[overm-notification](https://github.com/Tar-Mairon24/overm-notification)** | Email and push notifications | Go |
+| **[overm-notif-bridge](https://github.com/Tar-Mairon24/overm-notif-bridge)** | Kafka consumer → Novu API bridge (~50 lines) | Go |
 | **[overm-frontend](https://github.com/Tar-Mairon24/overm-frontend)** | Web app, served by nginx inside K8s | Vue / Angular |
 | **[overm-swagger](https://github.com/Tar-Mairon24/overm-swagger)** | Swagger UI mounting all service contracts | Docker |
 | **[overm-monitoring](https://github.com/Tar-Mairon24/overm-monitoring)** | Helm values, Grafana dashboards, ServiceMonitors | YAML |
+| **[overm-iac](https://github.com/Tar-Mairon24/overm-iac)** | Infraestructure as Code, for "Prod", create and automate the infraestructure needed | Terraform |
 
 ---
 
@@ -146,17 +150,25 @@ Consumes `recipe.image.uploaded` from Kafka. Sends the image to an AI model for 
 - **Produces:** `recipe.transcription.completed`
 - **Contract:** [`overm-contracts/kafka-contracts.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/kafka-contracts.yaml)
 
-### overm-notification
-Consumes notification events from Kafka and delivers them via email or push. Decoupled from all other services — nothing calls it directly, everything publishes to `notification.send` and this service handles delivery.
+### overm-notif-bridge
+A minimal Kafka consumer that reads from the `notification.send` topic and calls Novu's HTTP API. It owns no delivery logic itself. All templating, retries, provider switching, and delivery tracking are handled by Novu.
 
 - **Stack:** Go
 - **Consumes:** `notification.send`
+- **Calls:** Novu HTTP API (`POST /v1/events/trigger`)
 - **Contract:** [`overm-contracts/kafka-contracts.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/kafka-contracts.yaml)
+
+### Novu (self-hosted)
+Open source notification platform deployed via Helm chart inside EKS. Handles email, push, and SMS delivery with a provider abstraction layer — swap SendGrid for Mailgun without touching any service code. Alertmanager also routes infrastructure alerts through Novu so there is one single place for all notification templates and delivery logs.
+
+- **Deployment:** `helm install novu novu/novu --namespace overm`
+- **Providers:** SendGrid / Mailgun (email) · FCM / APNs (push) · Twilio (SMS, future)
+- **Dashboard:** Internal Novu UI for managing templates and viewing delivery status
 
 ### overm-frontend
 Web application served by nginx as a container inside Kubernetes. Communicates with backend services via HttpOnly cookies — JWTs are never accessible to JavaScript. CSRF protected.
 
-- **Stack:** Vue or Angular, nginx
+- **Stack:** Angular, nginx
 - **Auth pattern:** HttpOnly cookie (not localStorage — XSS protection)
 
 ---
@@ -257,7 +269,7 @@ feature/issue-NNN  →  develop  →  QA  →  main
 | Branch | Environment | Trigger |
 |---|---|---|
 | `feature/issue-NNN-short-description` | Local docker-compose | Created per GitHub Issue |
-| `develop` | Local docker-compose | PR from feature branch |
+| `develop` | Local docker-compose, image pulled from remote repository | PR from feature branch |
 | `QA` | Minikube | PR from develop |
 | `main` | EKS (AWS) | PR from QA |
 | `hotfix/issue-NNN` | Local → EKS | Production bug, branches from main |
@@ -287,7 +299,7 @@ Semantic versioning: `MAJOR.MINOR.PATCH`
 | `MINOR` (0.x.0) | New endpoint or feature, backward compatible |
 | `MAJOR` (x.0.0) | Breaking contract change — incompatible API change |
 
-A breaking contract change is specifically when a change to a file in `overm-contracts` would break existing consumers. That is the trigger for a major version bump.
+A breaking contract change is specifically when a change to a file in `overm-contracts` would break existing consumers. That is the trigger for a major version bump. Pretty standar.
 
 ---
 
@@ -334,7 +346,7 @@ GitHub Secrets during development. AWS Secrets Manager via OIDC (no static crede
 
 ## Infrastructure & IaC
 
-All cloud infrastructure is defined in Terraform inside [`overm-monitoring`](https://github.com/Tar-Mairon24/overm-monitoring) under `terraform/`.
+All cloud infrastructure is defined in Terraform inside [`overm-iac`](https://github.com/Tar-Mairon24/overm-iac) under `terraform/`.
 
 **AWS resources managed by Terraform:**
 - EKS cluster and node groups
@@ -347,7 +359,7 @@ All cloud infrastructure is defined in Terraform inside [`overm-monitoring`](htt
 - AWS Secrets Manager secrets
 - VPC, subnets, security groups
 
-**Cost note:** EKS is not cheap. The cluster is spun up for development and torn down when not in use. `terraform destroy` is one command. Never leave it running overnight.
+**Cost note:** EKS is not cheap. The cluster is spun up for development and torn down when not in use. `terraform destroy` is one command.
 
 ---
 
@@ -366,55 +378,9 @@ Every service exposes two endpoints required before a PR is merged:
 
 **Logs:** Structured JSON via `go.uber.org/zap`. Promtail DaemonSet collects from all pods automatically. Queryable in Grafana via LogQL.
 
-**Alertmanager** fires alerts into `overm-notification` service — reusing your own infrastructure instead of a third-party alerting tool.
-
-Install:
-```bash
-helm install overm-monitoring prometheus-community/kube-prometheus-stack \
-  --namespace monitoring --create-namespace
-
-helm install overm-loki grafana/loki-stack \
-  --namespace monitoring --set promtail.enabled=true
-```
+**Alertmanager** fires alerts into Novu — reusing the same notification platform as the app itself. One place for all delivery templates, whether triggered by a user action or an infrastructure alert.
 
 ---
-
-## Local Development
-
-### Prerequisites
-- Docker
-- docker-compose
-- Go 1.22+
-- minikube (for QA testing)
-
-### First time setup
-```bash
-# Create the shared network — run once
-docker network create overm-network
-```
-
-### Running a service locally
-```bash
-# Clone the service
-git clone https://github.com/Tar-Mairon24/overm-auth
-cd overm-auth
-
-# Copy env template
-cp .env.example .env
-# Fill in values in .env
-
-# Start service + its dependencies
-docker compose up
-```
-
-### Running Swagger UI
-```bash
-git clone https://github.com/Tar-Mairon24/overm-swagger
-cd overm-swagger
-# Copy contracts from overm-contracts into ./contracts/
-docker compose up
-# open http://localhost:8090
-```
 
 ### Port conventions
 | Service | Port |
@@ -424,8 +390,10 @@ docker compose up
 | overm-menu-shuffle | 8083 |
 | overm-nutrition | 8084 |
 | overm-image-processing | 8085 |
-| overm-notification | 8086 |
+| overm-notif-bridge | 8086 |
 | overm-frontend | 3000 |
+| Novu API | 3000 (internal) |
+| Novu Dashboard | 4200 (internal) |
 | overm-swagger | 8090 |
 | Grafana | 3001 |
 | Prometheus | 9090 |
@@ -447,7 +415,7 @@ docker compose up
 - [ ] Kafka setup — topics and local broker
 - [ ] `overm-nutrition` — external API integration
 - [ ] `overm-image-processing` — external AI API (OpenAI Vision / Google Vision)
-- [ ] `overm-notification` — email delivery
+- [ ] Novu self-hosted + `overm-notif-bridge` — email and push delivery
 - [ ] Full upload → transcribe → save flow working end to end
 
 ### Phase 3 — Cloud (Sep → Oct 2025)
@@ -475,23 +443,23 @@ docker compose up
 
 ## Key Design Decisions
 
-**Why polyrepo?**  
-Each service is an independently deployable unit with its own pipeline, its own versioning, and its own Dockerfile. This mirrors how real teams work. One repo per service means one PR per change, one pipeline per service, and clean separation of concerns. The overhead of managing multiple repos solo is minimal.
-
 **Why contracts before code?**  
 Writing OpenAPI contracts before implementing handlers forces you to think about API design as a first-class concern. When overm-menu-shuffle needs to call overm-recipe-catalog, the contract is the spec — no reading through someone else's handlers to figure out what fields come back. It also makes drift visible: if the code doesn't match the contract, something is wrong.
 
 **Why Kafka only for two flows?**  
-Kafka introduces operational complexity that is only justified when you genuinely need async. Image processing is slow and the user should not block on it — correct use of Kafka. Notifications are fire-and-forget — correct use of Kafka. Recipe creation is synchronous because the user is waiting for a 201 with their created recipe including macros — putting that through Kafka would mean you can't return anything meaningful to the user. The rule: if the user is staring at a spinner, use HTTP.
+Kafka introduces operational complexity that is only justified when you genuinely need async. Image processing is slow and the user should not block on it. Notifications are fire-and-forget. Recipe creation is synchronous because the user is waiting for a 201 with their created recipe including macros. The rule: if the user is staring at a spinner, use HTTP.
 
 **Why PostgreSQL for users and MongoDB for recipes?**  
 Users are relational. A user has refresh tokens, an auth provider, and future relationships to roles and preferences. Strong consistency and foreign keys matter here. Recipes are documents — ingredients, steps, and macros are nested, variable in structure, and don't benefit from normalization. MongoDB's document model fits naturally. Two databases, two schemas, one clear reason for each.
 
 **Why JWT validated locally?**  
-Every service shares `AUTH_JWT_SECRET` and validates the token locally. The alternative — calling overm-auth on every request to validate — would make auth a synchronous dependency of every single service call. If auth is slow or down, everything is slow or down. Local validation means each service is independently resilient. The tradeoff is that revoking a token requires waiting for expiry (24h) unless you maintain a blocklist — an acceptable tradeoff for this project.
+Every service shares `AUTH_JWT_SECRET` and validates the token locally. The alternative would make auth a synchronous dependency of every single service call. If auth is slow or down, everything is slow or down. Local validation means each service is independently resilient. The tradeoff is that revoking a token requires waiting for expiry (24h) unless you maintain a blocklist — an acceptable tradeoff for this project.
 
 **Why HttpOnly cookies for the web frontend?**  
-JWTs stored in localStorage are readable by any JavaScript on the page — including injected scripts from XSS attacks. HttpOnly cookies are set by the server and are completely inaccessible to JavaScript, even your own. The browser attaches them automatically on every request. CSRF protection (X-CSRF-Token header + cookie) covers the one new attack surface this introduces. Mobile apps use Bearer JWT in memory since they don't have the same XSS risk model.
+JWTs stored in localStorage are readable by any JavaScript on the page. HttpOnly cookies are set by the server and are completely inaccessible to JavaScript, even your own. The browser attaches them automatically on every request. CSRF protection (X-CSRF-Token header + cookie) covers the one new attack surface this introduces. Mobile apps use Bearer JWT in memory since they don't have the same XSS risk model.
+
+**Why Novu instead of a custom notification service?**  
+Novu is open source, self-hostable, and runs as a Helm chart inside the same EKS cluster. It handles templating, retries, delivery tracking, and provider abstraction. Swap SendGrid for Mailgun without touching any service code.
 
 ---
 
@@ -501,7 +469,7 @@ Built by Mario Irigoyen as a learning project during the final semester of a Com
 
 The app is intentionally overengineered. A recipe app does not need Kafka, Kubernetes, or a separate nutrition microservice. That is the point. Every architectural decision that would be justified at scale is practiced here at small scale so the patterns are familiar when they matter for real. But I dont want to be stuck developing an app ment for 10 people minimum for 5 years just to learn.
 
-*"I designed and built a polyrepo microservices system from scratch. The app helps me and my mom plan our meals. The architecture could handle a few more."*
+*"I designed and built a microservices system from scratch. The app helps two people plan their meals. The architecture could handle a few more."*
 
 ---
 
