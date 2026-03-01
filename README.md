@@ -4,7 +4,7 @@
 
 **Author:** Mario Irigoyen — [@Tar-Mairon24](https://github.com/Tar-Mairon24)  
 **Status:** Active development — Phase 1  
-**Stack:** Go · Python · Vue/Angular · Kubernetes · Kafka · MongoDB · PostgreSQL · Novu · AWS EKS
+**Stack:** Go · Python · Angular · Kubernetes · Kafka · MongoDB · PostgreSQL · Novu · AWS EKS · Terraform
 
 ---
 
@@ -46,10 +46,10 @@ Clients (Web · Mobile)
 ┌───────────────────────────────────────────────────────┐
 │  Amazon EKS — namespace: overm                        │
 │                                                       │
-│  overm-auth          overm-recipe-catalog             │
-│  overm-menu-shuffle  overm-nutrition                  │
-│  overm-image-processing  overm-notif-bridge           │
-│  overm-frontend                                       │
+│  api-auth            api-recipe-catalog               │
+│  api-menu-shuffle    api-nutrition                    │
+│  api-image-processing    api-notifications            │
+│  web-frontend                                         │
 │                                                       │
 │  ┌──────────────────────────────────────────────────┐ │
 │  │  Novu (self-hosted · Helm)                       │ │
@@ -67,58 +67,58 @@ Clients (Web · Mobile)
    AWS Secrets Manager · S3
 ```
 
-Full architecture diagram: [`overm-docs/diagrams/overm-architecture-v3.drawio.png`](./diagrams/overm-architecture-v3.drawio.png)
+Full architecture diagram: [`docs/diagrams/overm-architecture-v3.drawio`](./diagrams/overm-architecture-v3.drawio)
 
-Git flow diagram: [`overm-docs/diagrams/overm-gitflow.drawio.png`](./diagrams/overm-gitflow.drawio.png)
+Git flow diagram: [`docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio)
 
 ---
 
 ## Repositories
 
-All repositories live under the [@Tar-Mairon24](https://github.com/Tar-Mairon24) GitHub account with the `overm-` prefix so they sort together.
+All repositories live under the [overm-app](https://github.com/overm-app) GitHub organization.
 
 | Repository | Description | Language |
 |---|---|---|
-| **[overm-docs](https://github.com/Tar-Mairon24/overm-docs)** | Central documentation — you are here | Markdown |
-| **[overm-contracts](https://github.com/Tar-Mairon24/overm-contracts)** | OpenAPI specs + Kafka message schemas + Swagger UI mounting all service contracts | YAML |
-| **[overm-pipelines](https://github.com/Tar-Mairon24/overm-pipelines)** | Reusable GitHub Actions workflows | YAML |
-| **[overm-auth](https://github.com/Tar-Mairon24/overm-auth)** | User auth, JWT, Google OAuth | Go |
-| **[overm-recipe-catalog](https://github.com/Tar-Mairon24/overm-recipe-catalog)** | Recipe CRUD, image upload trigger | Go |
-| **[overm-menu-shuffle](https://github.com/Tar-Mairon24/overm-menu-shuffle)** | Menu generation and management | Go |
-| **[overm-nutrition](https://github.com/Tar-Mairon24/overm-nutrition)** | Macro calculator, external API integration | Go |
-| **[overm-image-processing](https://github.com/Tar-Mairon24/overm-image-processing)** | OCR, handwriting transcription | Python |
-| **[overm-notif-bridge](https://github.com/Tar-Mairon24/overm-notif-bridge)** | Kafka consumer → Novu API bridge | Go |
-| **[overm-frontend](https://github.com/Tar-Mairon24/overm-frontend)** | Web app, served by nginx inside K8s | Vue / Angular |
-| **[overm-monitoring](https://github.com/Tar-Mairon24/overm-monitoring)** | Helm values, Grafana dashboards, ServiceMonitors | YAML |
-| **[overm-iac](https://github.com/Tar-Mairon24/overm-iac)** | Infraestructure as Code, for "Prod", create and automate the infraestructure needed | Terraform |
+| **[docs](https://github.com/overm-app/docs)** | Central documentation — you are here | Markdown |
+| **[contracts](https://github.com/overm-app/contracts)** | OpenAPI specs + Kafka schemas + Swagger UI | YAML |
+| **[pipelines](https://github.com/overm-app/pipelines)** | Reusable GitHub Actions workflows | YAML |
+| **[IaC](https://github.com/overm-app/IaC)** | Terraform — AWS infrastructure | HCL |
+| **[monitoring](https://github.com/overm-app/monitoring)** | Helm values, Grafana dashboards, ServiceMonitors | YAML |
+| **[api-auth](https://github.com/overm-app/api-auth)** | User auth, JWT, Google OAuth | Go |
+| **[api-recipe-catalog](https://github.com/overm-app/api-recipe-catalog)** | Recipe CRUD, image upload trigger | Go |
+| **[api-menu-shuffle](https://github.com/overm-app/api-menu-shuffle)** | Menu generation and management | Go |
+| **[api-nutrition](https://github.com/overm-app/api-nutrition)** | Macro calculator, external API integration | Go |
+| **[api-image-processing](https://github.com/overm-app/api-image-processing)** | OCR, handwriting transcription | Python |
+| **[api-notifications](https://github.com/overm-app/api-notifications)** | Kafka consumer → Novu API bridge | Go |
+| **[web-frontend](https://github.com/overm-app/web-frontend)** | Angular app, served by nginx inside K8s | Angular |
 
 ---
 
 ## Services
 
-### overm-auth
+### api-auth
 Handles all authentication. Issues JWTs consumed and validated locally by every other service — no network call per request. Supports email/password and Google OAuth.
 
 - **Stack:** Go, Gin, PostgreSQL
-- **Endpoints:** `POST /auth/v1/login` · `POST /auth/v1/register` · `POST /auth/v1/refresh` · `POST /auth/v1/logout` · `GET /auth/google` · `GET /auth/google/callback` · `GET /users/me`
+- **Endpoints:** `POST /auth/v1/login` · `POST /auth/v1/register` · `POST /auth/v1/refresh` · `POST /auth/v1/logout` · `GET /auth/v1/google` · `GET /auth/v1/google/callback` · `GET /users/v1/me`
 - **Token delivery:** Bearer JWT for mobile/API clients · HttpOnly encrypted cookie for web browser clients (CSRF protected)
-- **Contract:** [`overm-contracts/user-auth-api.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/user-auth-api.yaml) · [`overm-contracts/user-auth-web.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/user-auth-web.yaml)
+- **Contract:** [`contracts/user-auth-api.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/user-auth-api.yaml) · [`contracts/user-auth-web.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/user-auth-web.yaml)
 
-### overm-recipe-catalog
-Manages the user's recipe library. Handles manual recipe creation and triggers async image processing via Kafka. Calls overm-nutrition synchronously during recipe creation so macros are available immediately.
+### api-recipe-catalog
+Manages the user's recipe library. Handles manual recipe creation and triggers async image processing via Kafka. Calls api-nutrition synchronously during recipe creation so macros are available immediately.
 
 - **Stack:** Go, Gin, MongoDB
-- **Endpoints:** `GET /recipe-catalog/v1/recipes` · `POST /recipe-catalog/v1/recipes` · `GET /recipe-catalog/v1/recipes/:id` · `PATCH /recipe-catalog/v1/recipes/:id` · `DELETE /recipe-catalog/v1/recipes/:id` · `POST /recipe-catalog/v1/recipes/upload`
+- **Endpoints:** `GET /recipes/v1` · `POST /recipes/v1` · `GET /recipes/v1/:id` · `PATCH /recipes/v1/:id` · `DELETE /recipes/v1/:id` · `POST /recipes/v1/upload` · `GET /recipes/v1/upload/:upload_id`
 - **Produces:** `recipe.image.uploaded` · `recipe.created`
-- **Contract:** [`overm-contracts/recipe-catalog.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/recipe-catalog.yaml)
+- **Contract:** [`contracts/recipe-catalog.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/recipe-catalog.yaml)
 
-### overm-menu-shuffle
+### api-menu-shuffle
 Owns all menu logic. Generates weekly/monthly meal plans from the user's recipe catalog. MVP uses a random shuffle algorithm. Future versions will support pinned recipes, calorie targets, prep time filters, and dietary constraints.
 
 - **Stack:** Go, Gin, MongoDB
 - **Endpoints:** `POST /menu/v1/generate` · `GET /menu/v1/active` · `PATCH /menu/v1/:id/confirm` · `GET /menu/v1/history`
 - **Produces:** `menu.activated`
-- **Contract:** [`overm-contracts/menu-shuffle.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/menu-shuffle.yaml)
+- **Contract:** [`contracts/menu-shuffle.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/menu-shuffle.yaml)
 
 **Menu generation request shape:**
 ```json
@@ -133,28 +133,28 @@ Owns all menu logic. Generates weekly/monthly meal plans from the user's recipe 
 ```
 The `strategy` field selects the algorithm. `pinned_recipes`, `targets`, and `filters` are null in MVP and ignored by the shuffle strategy — no schema changes needed when constrained generation is added.
 
-### overm-nutrition
-Calculates macros and calories for a given list of ingredients. Called synchronously by overm-recipe-catalog during recipe creation and by overm-image-processing after transcription. Looks up unknown ingredients against the USDA FoodData or Edamam external API and caches results.
+### api-nutrition
+Calculates macros and calories for a given list of ingredients. Called synchronously by api-recipe-catalog during recipe creation and by api-image-processing after transcription. Looks up unknown ingredients against the USDA FoodData or Edamam external API and caches results.
 
 - **Stack:** Go, Gin
 - **Endpoints:** `POST /nutrition/v1/calculate`
-- **Contract:** [`overm-contracts/nutrition.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/nutrition.yaml)
+- **Contract:** [`contracts/nutrition.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/nutrition.yaml)
 
-### overm-image-processing
-Consumes `recipe.image.uploaded` from Kafka. Sends the image to an AI model for OCR and handwriting transcription, then calls overm-nutrition to calculate macros, saves the completed recipe to MongoDB, and publishes `recipe.transcription.completed`. The AI backend is swappable — starts with an external API (OpenAI Vision / Google Vision), future goal is a self-trained model for specific handwriting recognition.
+### api-image-processing
+Consumes `recipe.image.uploaded` from Kafka. Sends the image to an AI model for OCR and handwriting transcription, then calls api-nutrition to calculate macros, saves the completed recipe to MongoDB, and publishes `recipe.transcription.completed`. The AI backend is swappable — starts with an external API (OpenAI Vision / Google Vision), future goal is a self-trained model for specific handwriting recognition.
 
 - **Stack:** Python
 - **Consumes:** `recipe.image.uploaded`
 - **Produces:** `recipe.transcription.completed`
-- **Contract:** [`overm-contracts/kafka-contracts.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/kafka-contracts.yaml)
+- **Contract:** [`contracts/kafka-contracts.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/kafka-contracts.yaml)
 
-### overm-notif-bridge
+### api-notifications
 A minimal Kafka consumer that reads from the `notification.send` topic and calls Novu's HTTP API. It owns no delivery logic itself. All templating, retries, provider switching, and delivery tracking are handled by Novu.
 
 - **Stack:** Go
 - **Consumes:** `notification.send`
 - **Calls:** Novu HTTP API (`POST /v1/events/trigger`)
-- **Contract:** [`overm-contracts/kafka-contracts.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/kafka-contracts.yaml)
+- **Contract:** [`contracts/kafka-contracts.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/kafka-contracts.yaml)
 
 ### Novu (self-hosted)
 Open source notification platform deployed via Helm chart inside EKS. Handles email, push, and SMS delivery with a provider abstraction layer — swap SendGrid for Mailgun without touching any service code. Alertmanager also routes infrastructure alerts through Novu so there is one single place for all notification templates and delivery logs.
@@ -163,7 +163,7 @@ Open source notification platform deployed via Helm chart inside EKS. Handles em
 - **Providers:** SendGrid / Mailgun (email) · FCM / APNs (push) · Twilio (SMS, future)
 - **Dashboard:** Internal Novu UI for managing templates and viewing delivery status
 
-### overm-frontend
+### web-frontend
 Web application served by nginx as a container inside Kubernetes. Communicates with backend services via HttpOnly cookies — JWTs are never accessible to JavaScript. CSRF protected.
 
 - **Stack:** Angular, nginx
@@ -175,10 +175,10 @@ Web application served by nginx as a container inside Kubernetes. Communicates w
 
 | Store | Used by | Contents |
 |---|---|---|
-| **PostgreSQL** | overm-auth | `users` table · `refresh_tokens` table |
-| **MongoDB** | overm-recipe-catalog | `recipes` collection (with macros, status: active/archived) |
-| **MongoDB** | overm-menu-shuffle | `menus` collection (status: draft/active/archived) |
-| **S3** | overm-image-processing | Uploaded recipe images |
+| **PostgreSQL** | api-auth | `users` table · `refresh_tokens` table |
+| **MongoDB** | api-recipe-catalog | `recipes` collection (with macros, status: active/archived) |
+| **MongoDB** | api-menu-shuffle | `menus` collection (status: draft/active/archived) |
+| **S3** | api-image-processing | Uploaded recipe images |
 
 **Why two databases:**  
 PostgreSQL for users because auth data is relational and needs strong consistency — users reference refresh tokens, OAuth providers, and future roles.  
@@ -197,23 +197,23 @@ Only flows where the user does not need to block are async. Everything else is s
 
 | Topic | Producer | Consumer | Trigger |
 |---|---|---|---|
-| `recipe.image.uploaded` | overm-recipe-catalog | overm-image-processing | User uploads a photo |
-| `recipe.transcription.completed` | overm-image-processing | overm-recipe-catalog · overm-notification | Transcription finished |
-| `recipe.created` | overm-recipe-catalog | (future: stats, recommendations) | Any recipe created |
-| `menu.activated` | overm-menu-shuffle | overm-notification | User confirms a menu |
-| `notification.send` | any service | overm-notification | Generic notification request |
+| `recipe.image.uploaded` | api-recipe-catalog | api-image-processing | User uploads a photo |
+| `recipe.transcription.completed` | api-image-processing | api-recipe-catalog · api-notifications | Transcription finished |
+| `recipe.created` | api-recipe-catalog | (future: stats, recommendations) | Any recipe created |
+| `menu.activated` | api-menu-shuffle | api-notifications | User confirms a menu |
+| `notification.send` | any service | api-notifications | Generic notification request |
 
 **Design rule:**  
 If the user is waiting for a response → HTTP.  
 If it's a background job the user doesn't block on → Kafka.
 
-Full message schemas: [`overm-contracts/kafka-contracts.yaml`](https://github.com/Tar-Mairon24/overm-contracts/blob/main/kafka-contracts.yaml)
+Full message schemas: [`contracts/kafka-contracts.yaml`](https://github.com/overm-app/contracts/blob/main/contracts/kafka-contracts.yaml)
 
 ---
 
 ## Service Contracts
 
-All service contracts live in [`overm-contracts`](https://github.com/Tar-Mairon24/overm-contracts/contracts/). They are written before any code is written for a service.
+All service contracts live in [`contracts`](https://github.com/overm-app/contracts). They are written before any code is written for a service.
 
 | Contract file | Description |
 |---|---|
@@ -224,10 +224,11 @@ All service contracts live in [`overm-contracts`](https://github.com/Tar-Mairon2
 | `nutrition.yaml` | Macro calculation |
 | `kafka-contracts.yaml` | All Kafka message schemas |
 
-**Swagger UI** mounts all contracts and runs locally via [`overm-contracts`](https://github.com/Tar-Mairon24/overm-contracts):
+**Swagger UI** mounts all contracts and runs locally:
 
 ```bash
-cd overm-contracts
+git clone https://github.com/overm-app/contracts
+cd contracts
 docker compose up
 # open http://localhost:8090
 ```
@@ -244,7 +245,7 @@ docker compose up
 **JWT claims shape** (shared across all services for local validation):
 ```json
 {
-  "sub":   "user-uuid",
+  "sub":   "user-uuid-v7",
   "email": "user@example.com",
   "name":  "Mario Irigoyen",
   "iat":   1730000000,
@@ -256,7 +257,7 @@ docker compose up
 
 ## Git Flow & Branching Strategy
 
-Full diagram: [`overm-docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio)
+Full diagram: [`docs/diagrams/overm-gitflow.drawio`](./diagrams/overm-gitflow.drawio)
 
 ```
 feature/issue-NNN  →  develop  →  QA  →  main
@@ -267,7 +268,7 @@ feature/issue-NNN  →  develop  →  QA  →  main
 | Branch | Environment | Trigger |
 |---|---|---|
 | `feature/issue-NNN-short-description` | Local docker-compose | Created per GitHub Issue |
-| `develop` | Local docker-compose, image pulled from remote repository | PR from feature branch |
+| `develop` | Local docker-compose | PR from feature branch |
 | `QA` | Minikube | PR from develop |
 | `main` | EKS (AWS) | PR from QA |
 | `hotfix/issue-NNN` | Local → EKS | Production bug, branches from main |
@@ -297,21 +298,21 @@ Semantic versioning: `MAJOR.MINOR.PATCH`
 | `MINOR` (0.x.0) | New endpoint or feature, backward compatible |
 | `MAJOR` (x.0.0) | Breaking contract change — incompatible API change |
 
-A breaking contract change is specifically when a change to a file in `overm-contracts` would break existing consumers. That is the trigger for a major version bump. Pretty standar.
+A breaking contract change is specifically when a change to a file in `contracts` would break existing consumers. That is the trigger for a major version bump.
 
 ---
 
 ## CI/CD Pipeline
 
-Pipelines are defined once in [`overm-pipelines`](https://github.com/Tar-Mairon24/overm-pipelines) as reusable GitHub Actions workflows. Each service repo calls the central pipeline with parameters — changing the pipeline once propagates to every service automatically.
+Pipelines are defined once in [`pipelines`](https://github.com/overm-app/pipelines) as reusable GitHub Actions workflows. Each service repo calls the central pipeline with parameters — changing the pipeline once propagates to every service automatically.
 
 ```yaml
 # Each service repo — entire CI file
 jobs:
   pipeline:
-    uses: Tar-Mairon24/overm-pipelines/.github/workflows/go-service.yml@main
+    uses: overm-app/pipelines/.github/workflows/go-service.yml@main
     with:
-      service_name: overm-auth
+      service_name: api-auth
       go_version: "1.22"
     secrets: inherit
 ```
@@ -332,19 +333,19 @@ push to branch
 
 **Image tagging:**
 ```
-yourname/overm-auth:develop         ← branch (moving)
-yourname/overm-auth:sha-a1b2c3d     ← git SHA (immutable, for rollbacks)
-yourname/overm-auth:1.0.0           ← semver on release tag
+overmapp/api-auth:develop       ← branch (moving)
+overmapp/api-auth:sha-a1b2c3d   ← git SHA (immutable, for rollbacks)
+overmapp/api-auth:1.0.0         ← semver on release tag
 ```
 
 **Secrets management:**  
-GitHub Secrets during development. AWS Secrets Manager via OIDC (no static credentials) when deployed to EKS. The same secrets are consumed by running pods via the External Secrets Operator syncing into Kubernetes Secrets.
+Org-level GitHub secrets shared across all repos in `overm-app`. AWS Secrets Manager via OIDC (no static credentials) when deployed to EKS. Running pods consume the same secrets via the External Secrets Operator syncing into Kubernetes Secrets.
 
 ---
 
 ## Infrastructure & IaC
 
-All cloud infrastructure is defined in Terraform inside [`overm-iac`](https://github.com/Tar-Mairon24/overm-iac) under `terraform/`.
+All cloud infrastructure is defined in Terraform inside [`IaC`](https://github.com/overm-app/IaC).
 
 **AWS resources managed by Terraform:**
 - EKS cluster and node groups
@@ -381,18 +382,19 @@ Every service exposes two endpoints required before a PR is merged:
 ---
 
 ### Port conventions
+
 | Service | Port |
 |---|---|
-| overm-auth | 8081 |
-| overm-recipe-catalog | 8082 |
-| overm-menu-shuffle | 8083 |
-| overm-nutrition | 8084 |
-| overm-image-processing | 8085 |
-| overm-notif-bridge | 8086 |
-| overm-frontend | 3000 |
+| api-auth | 8081 |
+| api-recipe-catalog | 8082 |
+| api-menu-shuffle | 8083 |
+| api-nutrition | 8084 |
+| api-image-processing | 8085 |
+| api-notifications | 8086 |
+| web-frontend | 3000 |
 | Novu API | 3000 (internal) |
 | Novu Dashboard | 4200 (internal) |
-| overm-swagger | 8090 |
+| contracts (Swagger UI) | 8090 |
 | Grafana | 3001 |
 | Prometheus | 9090 |
 
@@ -403,17 +405,18 @@ Every service exposes two endpoints required before a PR is merged:
 ### Phase 1 — Core services (Feb → May 2025)
 - [x] Architecture design and service contracts
 - [x] Git flow and CI/CD pipeline design
-- [ ] `overm-auth` — JWT, Google OAuth, PostgreSQL
-- [ ] `overm-recipe-catalog` — CRUD, sync nutrition call
-- [ ] `overm-menu-shuffle` — MVP shuffle algorithm
+- [x] GitHub org, branch protection, org secrets
+- [ ] `api-auth` — JWT, Google OAuth, PostgreSQL
+- [ ] `api-recipe-catalog` — CRUD, sync nutrition call
+- [ ] `api-menu-shuffle` — MVP shuffle algorithm
 - [ ] Basic frontend — login, recipe list, generate menu
 - [ ] All three services running in Minikube
 
 ### Phase 2 — Async and AI (Jun → Aug 2025)
 - [ ] Kafka setup — topics and local broker
-- [ ] `overm-nutrition` — external API integration
-- [ ] `overm-image-processing` — external AI API (OpenAI Vision / Google Vision)
-- [ ] Novu self-hosted + `overm-notif-bridge` — email and push delivery
+- [ ] `api-nutrition` — external API integration
+- [ ] `api-image-processing` — external AI API (OpenAI Vision / Google Vision)
+- [ ] Novu self-hosted + `api-notifications` — email and push delivery
 - [ ] Full upload → transcribe → save flow working end to end
 
 ### Phase 3 — Cloud (Sep → Oct 2025)
@@ -436,15 +439,15 @@ Every service exposes two endpoints required before a PR is merged:
 - [ ] Recipe statistics and user insights
 - [ ] React Native mobile app
 - [ ] Menu archive analytics
-- [ ] Service identities / mtls for service authentication
-- [ ] Server side token blocklist
+- [ ] Service identities / mTLS for service-to-service authentication
+- [ ] Server-side token blocklist
 
 ---
 
 ## Key Design Decisions
 
 **Why contracts before code?**  
-Writing OpenAPI contracts before implementing handlers forces you to think about API design as a first-class concern. When overm-menu-shuffle needs to call overm-recipe-catalog, the contract is the spec — no reading through someone else's handlers to figure out what fields come back. It also makes drift visible: if the code doesn't match the contract, something is wrong.
+Writing OpenAPI contracts before implementing handlers forces you to think about API design as a first-class concern. When api-menu-shuffle needs to call api-recipe-catalog, the contract is the spec — no reading through someone else's handlers to figure out what fields come back. It also makes drift visible: if the code doesn't match the contract, something is wrong.
 
 **Why Kafka only for two flows?**  
 Kafka introduces operational complexity that is only justified when you genuinely need async. Image processing is slow and the user should not block on it. Notifications are fire-and-forget. Recipe creation is synchronous because the user is waiting for a 201 with their created recipe including macros. The rule: if the user is staring at a spinner, use HTTP.
@@ -458,11 +461,11 @@ Every service shares `AUTH_JWT_SECRET` and validates the token locally. The alte
 **Why HttpOnly cookies for the web frontend?**  
 JWTs stored in localStorage are readable by any JavaScript on the page. HttpOnly cookies are set by the server and are completely inaccessible to JavaScript, even your own. The browser attaches them automatically on every request. CSRF protection (X-CSRF-Token header + cookie) covers the one new attack surface this introduces. Mobile apps use Bearer JWT in memory since they don't have the same XSS risk model.
 
-**Using UUIDs instead of integer id**
-UUIDs are UUID v7 — time-ordered for index-friendly PostgreSQL insertion. UUID v4 is random and causes B-tree index fragmentation at scale. UUID v7 encodes a timestamp in the high bits so new rows insert sequentially, preserving index locality while keeping the distributed-safe uniqueness of UUIDs.
+**Why UUID v7 instead of integer IDs?**  
+UUID v4 is random and causes B-tree index fragmentation at scale — every insert lands at a random position in the index. UUID v7 encodes a timestamp in the high bits so new rows insert sequentially, preserving index locality while keeping the distributed-safe uniqueness of UUIDs. No surrogate integer needed.
 
 **Why Novu instead of a custom notification service?**  
-Novu is open source, self-hostable, and runs as a Helm chart inside the same EKS cluster. It handles templating, retries, delivery tracking, and provider abstraction. Swap SendGrid for Mailgun without touching any service code.
+Novu is open source, self-hostable, and runs as a Helm chart inside the same EKS cluster. It handles templating, retries, delivery tracking, and provider abstraction. Swap SendGrid for Mailgun without touching any service code. The `api-notifications` bridge becomes ~50 lines of Go that reads from Kafka and calls Novu's API — learning to integrate with a real notification platform is more valuable than reinventing one.
 
 ---
 
@@ -476,4 +479,4 @@ The app is intentionally overengineered. A recipe app does not need Kafka, Kuber
 
 ---
 
-*Last updated: February 2026*
+*Last updated: March 2026*
