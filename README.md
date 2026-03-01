@@ -29,7 +29,6 @@ The app itself is simple on purpose. The point is the architecture — polyrepo 
 - [CI/CD Pipeline](#cicd-pipeline)
 - [Infrastructure & IaC](#infrastructure--iac)
 - [Observability](#observability)
-- [Local Development](#local-development)
 - [Roadmap](#roadmap)
 - [Key Design Decisions](#key-design-decisions)
 
@@ -81,7 +80,7 @@ All repositories live under the [@Tar-Mairon24](https://github.com/Tar-Mairon24)
 | Repository | Description | Language |
 |---|---|---|
 | **[overm-docs](https://github.com/Tar-Mairon24/overm-docs)** | Central documentation — you are here | Markdown |
-| **[overm-contracts](https://github.com/Tar-Mairon24/overm-contracts)** | OpenAPI specs + Kafka message schemas | YAML |
+| **[overm-contracts](https://github.com/Tar-Mairon24/overm-contracts)** | OpenAPI specs + Kafka message schemas + Swagger UI mounting all service contracts | YAML |
 | **[overm-pipelines](https://github.com/Tar-Mairon24/overm-pipelines)** | Reusable GitHub Actions workflows | YAML |
 | **[overm-auth](https://github.com/Tar-Mairon24/overm-auth)** | User auth, JWT, Google OAuth | Go |
 | **[overm-recipe-catalog](https://github.com/Tar-Mairon24/overm-recipe-catalog)** | Recipe CRUD, image upload trigger | Go |
@@ -90,7 +89,6 @@ All repositories live under the [@Tar-Mairon24](https://github.com/Tar-Mairon24)
 | **[overm-image-processing](https://github.com/Tar-Mairon24/overm-image-processing)** | OCR, handwriting transcription | Python |
 | **[overm-notif-bridge](https://github.com/Tar-Mairon24/overm-notif-bridge)** | Kafka consumer → Novu API bridge | Go |
 | **[overm-frontend](https://github.com/Tar-Mairon24/overm-frontend)** | Web app, served by nginx inside K8s | Vue / Angular |
-| **[overm-swagger](https://github.com/Tar-Mairon24/overm-swagger)** | Swagger UI mounting all service contracts | Docker |
 | **[overm-monitoring](https://github.com/Tar-Mairon24/overm-monitoring)** | Helm values, Grafana dashboards, ServiceMonitors | YAML |
 | **[overm-iac](https://github.com/Tar-Mairon24/overm-iac)** | Infraestructure as Code, for "Prod", create and automate the infraestructure needed | Terraform |
 
@@ -215,7 +213,7 @@ Full message schemas: [`overm-contracts/kafka-contracts.yaml`](https://github.co
 
 ## Service Contracts
 
-All service contracts live in [`overm-contracts`](https://github.com/Tar-Mairon24/overm-contracts). They are written before any code is written for a service.
+All service contracts live in [`overm-contracts`](https://github.com/Tar-Mairon24/overm-contracts/contracts/). They are written before any code is written for a service.
 
 | Contract file | Description |
 |---|---|
@@ -226,10 +224,10 @@ All service contracts live in [`overm-contracts`](https://github.com/Tar-Mairon2
 | `nutrition.yaml` | Macro calculation |
 | `kafka-contracts.yaml` | All Kafka message schemas |
 
-**Swagger UI** mounts all contracts and runs locally via [`overm-swagger`](https://github.com/Tar-Mairon24/overm-swagger):
+**Swagger UI** mounts all contracts and runs locally via [`overm-contracts`](https://github.com/Tar-Mairon24/overm-contracts):
 
 ```bash
-cd overm-swagger
+cd overm-contracts
 docker compose up
 # open http://localhost:8090
 ```
