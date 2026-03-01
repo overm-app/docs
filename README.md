@@ -88,7 +88,7 @@ All repositories live under the [@Tar-Mairon24](https://github.com/Tar-Mairon24)
 | **[overm-menu-shuffle](https://github.com/Tar-Mairon24/overm-menu-shuffle)** | Menu generation and management | Go |
 | **[overm-nutrition](https://github.com/Tar-Mairon24/overm-nutrition)** | Macro calculator, external API integration | Go |
 | **[overm-image-processing](https://github.com/Tar-Mairon24/overm-image-processing)** | OCR, handwriting transcription | Python |
-| **[overm-notif-bridge](https://github.com/Tar-Mairon24/overm-notif-bridge)** | Kafka consumer → Novu API bridge (~50 lines) | Go |
+| **[overm-notif-bridge](https://github.com/Tar-Mairon24/overm-notif-bridge)** | Kafka consumer → Novu API bridge | Go |
 | **[overm-frontend](https://github.com/Tar-Mairon24/overm-frontend)** | Web app, served by nginx inside K8s | Vue / Angular |
 | **[overm-swagger](https://github.com/Tar-Mairon24/overm-swagger)** | Swagger UI mounting all service contracts | Docker |
 | **[overm-monitoring](https://github.com/Tar-Mairon24/overm-monitoring)** | Helm values, Grafana dashboards, ServiceMonitors | YAML |
@@ -457,6 +457,9 @@ Every service shares `AUTH_JWT_SECRET` and validates the token locally. The alte
 
 **Why HttpOnly cookies for the web frontend?**  
 JWTs stored in localStorage are readable by any JavaScript on the page. HttpOnly cookies are set by the server and are completely inaccessible to JavaScript, even your own. The browser attaches them automatically on every request. CSRF protection (X-CSRF-Token header + cookie) covers the one new attack surface this introduces. Mobile apps use Bearer JWT in memory since they don't have the same XSS risk model.
+
+**Using UUIDs instead of integer id**
+UUIDs are UUID v7 — time-ordered for index-friendly PostgreSQL insertion. UUID v4 is random and causes B-tree index fragmentation at scale. UUID v7 encodes a timestamp in the high bits so new rows insert sequentially, preserving index locality while keeping the distributed-safe uniqueness of UUIDs.
 
 **Why Novu instead of a custom notification service?**  
 Novu is open source, self-hostable, and runs as a Helm chart inside the same EKS cluster. It handles templating, retries, delivery tracking, and provider abstraction. Swap SendGrid for Mailgun without touching any service code.
