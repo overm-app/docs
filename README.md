@@ -438,6 +438,8 @@ Every service exposes two endpoints required before a PR is merged:
 - [ ] Recipe statistics and user insights
 - [ ] React Native mobile app
 - [ ] Menu archive analytics
+- [ ] Service identities / mtls for service authentication
+- [ ] Server side token blocklist
 
 ---
 
